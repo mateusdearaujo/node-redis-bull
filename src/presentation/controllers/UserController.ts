@@ -1,15 +1,18 @@
 import Queue from '../../lib/Queue'
 
-import { Request, Response } from 'express'
+import { Controller, HttpRequest, HttpResponse } from '../protocols'
 
-export default {
-  async store(req: Request, res: Response) {
+export class UserController implements Controller {
+  async handle(req: HttpRequest): Promise<HttpResponse> {
     const { name, email, password } = req.body
 
     const user = { name, email, password }
 
     await Queue.add('RegistrationMail', { user })
 
-    return res.json(user)
-  },
+    return {
+      statusCode: 200,
+      body: {},
+    }
+  }
 }
